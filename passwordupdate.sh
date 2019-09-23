@@ -3,17 +3,15 @@
 # Option flag parsing using bash's getopts function
 while getopts ":u:o:n:" option; do
     case "${option}" in
-    #   u) u=${OPTARG} ;;       # enables "-u" flag for     specifying username
-    #   o) o=${OPTARG} ;;       # enables "-o" flag for specifying old password
+        u) u=${OPTARG} ;;       # enables "-u" flag for specifying username
         n) n=${OPTARG} ;;       # enables "-n" flag for specifying new password
     esac
 done
 
-# Reads ip_list.txt and iterates passwd with user and password option arguments
+# Reads IPs from ip_list.txt and enters user and new pass specified by -u and -n option arguments
+# Note: Current password must be entered manually for every target machine in ip_list.txt
 for ip in $(cat ip_list.txt); do
-ssh root@$ip 'passwd << EOF
-'${n}'
-'${n}'
-EOF' ;
+echo -e "Server IP is: $ip"
+ssh root@$ip 'echo '${n}' | passwd --stdin '${u}''
 
 done
